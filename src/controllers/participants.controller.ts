@@ -2,7 +2,6 @@ import participantsService from '../services/participants.service';
 import { Request, Response } from "express";
 
 async function create(req: Request, res: Response) {
-  const body = req.body as BodyParams
   try {
     const { name, balance } = req.body;
 
@@ -22,10 +21,6 @@ async function read(req: Request, res: Response) {
     res.sendStatus(500);
   }
 }
-
-
-export type BodyParams = {};
-export type UpdateBodyParams = Partial<BodyParams>;
 
 export default {
   create,

@@ -1,5 +1,4 @@
 import participantsRepository from '../repositories/participants.repository';
-import { BodyParams, UpdateBodyParams } from '../controllers/participants.controller';
 
 async function createParticipant(name: string, balance: number) {
   if (balance < 1000) {
