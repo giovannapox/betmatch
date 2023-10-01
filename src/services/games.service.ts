@@ -11,5 +11,5 @@ async function getGames () {
 export default {
     createGame,
     getGames
-  };
+};
   
