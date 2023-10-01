@@ -5,9 +5,9 @@ const gamesRouter = Router();
 
 gamesRouter
     .post("/games", gamesController.createGame)
-    .post("/games/:id/finish", )
+    .post("/games/:id/finish", gamesController.finishGame)
     .get("/games", gamesController.findGames)
-    .get("/games/:id", )
+    .get("/games/:id", gamesController.findGameById)
 
 
 export { gamesRouter };    

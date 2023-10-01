@@ -1,10 +1,10 @@
+import { insufficientInitialBalanceError } from '../errors/insufficient-initial-balance-error';
+import { notFoundError } from '../errors/not-found-error';
 import participantsRepository from '../repositories/participants.repository';
 
 async function createParticipant(name: string, balance: number) {
-  if (balance < 1000) {
-    throw new Error('O saldo inicial deve ser pelo menos R$ 10,00 (1000 centavos).');
-  }
-
+  if (balance < 1000) throw insufficientInitialBalanceError();
+  
   return await participantsRepository.createParticipant(name, balance);
 }
 
@@ -16,11 +16,22 @@ async function getParticipantById(participantId: number) {
   return await participantsRepository.getParticipantById(participantId);
 }
 
-async function deductBalance(participantId: number, amountBet: number) {
+async function updateBalance(participantId: number, amountBet: number) {
   const participant = await participantsRepository.getParticipantById(participantId);
-  if (!participant ) throw new Error('O participante não existe');
+  if (!participant ) throw notFoundError('Participant not found');
   
   const updatedBalance = participant.balance - amountBet;
+
+  await participantsRepository.updateParticipantBalance(participantId, updatedBalance);
+
+  return updatedBalance;
+}
+
+async function updateWonBalance(participantId: number, amountWon: number) {
+  const participant = await participantsRepository.getParticipantById(participantId);
+  if (!participant ) throw notFoundError('Participant not found');
+  
+  const updatedBalance = participant.balance + amountWon;
 
   await participantsRepository.updateParticipantBalance(participantId, updatedBalance);
 
@@ -31,5 +42,6 @@ export default {
   createParticipant,
   getParticipants,
   getParticipantById,
-  deductBalance
+  updateBalance,
+  updateWonBalance
 };

@@ -1,3 +1,4 @@
+import httpStatus from 'http-status';
 import participantsService from '../services/participants.service';
 import { Request, Response } from "express";
 
@@ -9,6 +10,9 @@ async function create(req: Request, res: Response) {
     res.status(201).json(participant);
 
   } catch (error) {
+    if (error.name === "InsufficientInitialBalanceError") {
+      return res.status(httpStatus.BAD_REQUEST).send(error.message);
+    }
     res.sendStatus(500);
   }
 }

@@ -1,16 +1,22 @@
 import gamesRepository from '../repositories/games.repository';
 import betRepository from '../repositories/bets.repository';
 import participantsService from './participants.service';
+import { notFoundError } from '../errors/not-found-error';
+import { insufficientBalanceError } from '../errors/insufficient-balance-error';
+import { conflictError } from '../errors/conflict-error';
 
 async function createBet (homeTeamScore: number, awayTeamScore: number, amountBet: number, gameId: number, participantId: number) {
     const participant = await participantsService.getParticipantById(participantId);
-    if (!participant ) throw new Error('O participante não existe');
-    if (participant.balance < amountBet) throw new Error('Saldo insuficiente para criar a aposta.');
+    if (!participant ) throw notFoundError('Participant not found.');
+    if (participant.balance < amountBet) throw insufficientBalanceError();
 
+    const game = await gamesRepository.getGameById(gameId);
+    if(!game) throw notFoundError('Game not found.')
+    
     const gameFinished = await isGameFinished(gameId);
-    if (gameFinished) throw new Error('Não é possível criar uma aposta em um jogo que já finalizou.');
+    if (gameFinished) throw conflictError('The game has already concluded.');
 
-    await participantsService.deductBalance(participantId, amountBet);
+    await participantsService.updateBalance(participantId, amountBet);
 
     return await betRepository.createBet(homeTeamScore, awayTeamScore, amountBet, gameId, participantId);
 }

@@ -13,7 +13,31 @@ async function createBet (homeTeamScore: number, awayTeamScore: number, amountBe
     });
 };
 
+async function updateBetStatus(betId: number, status: string){
+  return await prisma.bet.update({
+    where: {
+      id: betId
+    },
+    data: {
+      status
+    }
+  })
+}
+
+async function updateBetAmount (betId: number, amountWon: number){
+  return await prisma.bet.update({
+    where: {
+      id: betId
+    },
+    data: {
+      amountWon
+    }
+  })
+}
+
 export default {
     createBet,
+    updateBetStatus,
+    updateBetAmount
 };
   

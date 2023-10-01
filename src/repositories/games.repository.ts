@@ -9,21 +9,33 @@ async function createGame (homeTeamName: string, awayTeamName: string){
       });
 }
 
-async function finishGame (){
-    
+async function finishGame (gameId: number, homeTeamScore: number, awayTeamScore: number){
+    return prisma.game.update({
+      where: {
+        id: gameId
+      },
+      data: {
+        homeTeamScore,
+        awayTeamScore,
+        isFinished: true,
+      },
+      include: {
+        bets: true
+      }
+    })
 }
 
 async function findGames (){
     return prisma.game.findMany();
 }
 
-async function findGameById (){
-    
-}
 
 async function getGameById(gameId: number) {
   return await prisma.game.findUnique({
     where: { id: gameId },
+    include: {
+      bets: true
+    },
   });
 }
 
@@ -31,6 +43,5 @@ export default {
     createGame,
     finishGame,
     findGames,
-    findGameById,
     getGameById
 };
