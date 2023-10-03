@@ -15,9 +15,15 @@ services:
     ports:
       - 4000:4000
     depends_on:
+<<<<<<< HEAD
       - postgress
       
 volumes:
   pg:
 
+=======
+      - postgres
+volumes:
+  pg:
+>>>>>>> 3df1992d75f0ddcdfb77063894f7ba8130fe8ba4
     

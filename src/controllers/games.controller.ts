@@ -17,7 +17,7 @@ async function createGame(req: Request, res: Response) {
 async function findGames(req: Request, res: Response) {
     try {
         const games = await gamesService.getGames();
-        res.status(201).json(games);
+        res.status(200).json(games);
     
       } catch (error) {
         res.sendStatus(500);
@@ -28,7 +28,7 @@ async function findGameById(req: Request, res: Response) {
   const { id } = req.params;
   try {
       const game = await gamesService.getGamesById(Number(id));
-      res.status(201).json(game);
+      res.status(200).json(game);
   
     } catch (error) {
       if (error.name === "NotFoundError") {
