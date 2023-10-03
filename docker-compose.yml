@@ -1,0 +1,23 @@
+services:
+  postgres: 
+    image: postgres
+    container_name: postgres
+    env_file: 
+       - .env 
+    ports:
+      - 5433:5432
+    volumes: 
+       - pg:/var/lib/postgresql/data
+
+  backend:
+    build: .
+    container_name: backend
+    ports:
+      - 4000:4000
+    depends_on:
+      - postgress
+      
+volumes:
+  pg:
+
+    
