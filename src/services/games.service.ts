@@ -21,10 +21,12 @@ async function getGamesById (id: number) {
 }
 
 async function finishGame (gameId: number, homeTeamScore: number, awayTeamScore: number){
-    const game = await gamesRepository.finishGame(gameId, homeTeamScore, awayTeamScore);
-    if (!game) throw notFoundError('Game not found');
+    const findGame = await gamesRepository.getGameById(gameId);
+    if (!findGame) throw notFoundError('Game not found');
 
-    if(game.isFinished === true) throw conflictError('Game already finished.');
+    if(findGame.isFinished === true) throw conflictError('Game already finished.');
+    
+    const game = await gamesRepository.finishGame(gameId, homeTeamScore, awayTeamScore);
     const allBets = game.bets;
   
     const betsPending = game.bets.filter((b) => {
@@ -54,7 +56,7 @@ async function finishGame (gameId: number, homeTeamScore: number, awayTeamScore:
             }
         }
     }))
-    console.log(game2)
+    
     return game2;
 }
 

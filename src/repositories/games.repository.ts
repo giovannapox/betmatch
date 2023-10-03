@@ -10,7 +10,7 @@ async function createGame (homeTeamName: string, awayTeamName: string){
 }
 
 async function finishGame (gameId: number, homeTeamScore: number, awayTeamScore: number){
-    return prisma.game.update({
+    const game = prisma.game.update({
       where: {
         id: gameId
       },
@@ -23,6 +23,9 @@ async function finishGame (gameId: number, homeTeamScore: number, awayTeamScore:
         bets: true
       }
     })
+
+    if(!game) return null
+    return game;
 }
 
 async function findGames (){
