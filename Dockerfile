@@ -2,12 +2,10 @@ FROM node:alpine
 
 WORKDIR /app
 
-COPY . .
+COPY . . 
+RUN npm install
+RUN npm run build
 
 EXPOSE 4000
-
-RUN npm i
-
-RUN npm run build
 
 CMD ["npm", "start"]

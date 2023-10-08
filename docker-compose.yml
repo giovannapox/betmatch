@@ -1,29 +1,28 @@
+version: "3"
 services:
-  postgres: 
-    image: postgres
-    container_name: postgres
-    env_file: 
-       - .env 
+  postgres:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_bet_data:/var/lib/postgresql/data
     ports:
-      - 5433:5432
-    volumes: 
-       - pg:/var/lib/postgresql/data
-
+      - "5434:5432"
+    networks:
+      - bet-network
+  
   backend:
     build: .
-    container_name: backend
     ports:
-      - 4000:4000
+      - "4000:4000"
     depends_on:
-<<<<<<< HEAD
-      - postgress
+      - postgres
+    networks:
+      - bet-network
       
 volumes:
-  pg:
-
-=======
-      - postgres
-volumes:
-  pg:
->>>>>>> 3df1992d75f0ddcdfb77063894f7ba8130fe8ba4
-    
+  postgres_bet_data:
+networks:
+  bet-network:
+    driver: bridge

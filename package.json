@@ -5,17 +5,18 @@
   "main": "index.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon ./src/server.ts",
-    "start": "node dist/server.js",
-    "build": "tsc -p tsconfig.json",
+    "start": "npm run prod:migrate && node dist/server.js",
+    "prod:migrate": "prisma migrate deploy",
+    "build": "tsc -p tsconfig.build.json",
     "lint": "eslint .",
     "prebuild": "rm -rf dist",
-    "test": "cross-env NODE_ENV=test jest --passWithNoTests --runInBand",
+    "test": "cross-env NODE_ENV=test dotenv_config_path=./.env.test jest --passWithNoTests --runInBand",
     "test:migration:run": "cross-env NODE_ENV=test dotenv_config_path=./.env.test jest --passWithNoTests --runInBand",
     "test:migration:generate": "npm run test:load-envs prisma migrate dev",
     "test:watch": "jest --watch --passWithNoTests --runInBand",
     "test:load-envs": "node load-envs.js",
     "test:seed": "npm run test:load-envs prisma db seed",
-    "test:coverage": "cross-env NODE_ENV=test jest --passWithNoTests --runInBand --coverage --collectCoverageFrom='./src/**'"
+    "test:coverage": "cross-env NODE_ENV=test dotenv_config_path=./.env.test jest --passWithNoTests --runInBand --coverage --collectCoverageFrom='./src/**'"
   },
   "keywords": [],
   "author": "",
